@@ -1,9 +1,15 @@
 import pika
 import json
-import constant
+from dotmap import DotMap
+
+from constant import AGENT_MONITOR
+AGENT_MONITOR = DotMap(AGENT_MONITOR)
 
 
 def sendRabbitMQ(body):
+    '''
+    This function receive a dict-like body and send them to queue
+    '''
     credentials = pika.PlainCredentials('rabbit', 'rabbitpass')
     paramaters = pika.ConnectionParameters(host='localhost',
                                            port=5672,
@@ -35,7 +41,7 @@ def sendRabbitMQ(body):
                                   content_type='text/plain', delivery_mode=1),
                               mandatory=True)
     except pika.exceptions.UnroutableError as e:
-        print('Unroutable')
+        print('UnRoutable')
         print(e)
     except Exception as e:
         print(e)
@@ -43,34 +49,30 @@ def sendRabbitMQ(body):
     connection.close()
 
 
-def byte2str(inputByte):
-    string = inputByte.decode('utf-8')
-    return string
-
-
-def str2byte(inputString):
-    data = inputString.encode('utf-8')
-    return data
-
-
 class ReceiveMonitor():
-    def __init__(self, msgType, status, msg, routingKey):
-        self.msgType = msgType
+    def __init__(self, payloadType, status, msg, routingKey):
+        self.payloadType = payloadType
         self.status = status
         self.msg = msg
         self.routingKey = routingKey
 
-    def getJSON(self):
+    def getDict(self):
         return {
-            "type": constant.ANSWER_TYPE,
+            "type": AGENT_MONITOR.ANSWER.TYPE,
             "payload": {
-                "type": self.type,
+                "type": self.payloadType,
                 "status": self.status,
                 "msg": self.msg
             },
             "routingKey": self.routingKey
-            # "monitor.result.cli_93f70840-719e-4a79-bf74-e51a6e1c9708"
         }
 
 
-constant.ANSWER_PAYLOAD_STATUS.get('SUCCESS')
+for i in range(100):
+    testAnswer = ReceiveMonitor(
+        payloadType=AGENT_MONITOR.ANSWER.PAYLOAD.TYPE.UPDATE,
+        status=AGENT_MONITOR.ANSWER.PAYLOAD.STATUS.SUCCESS,
+        msg="Updated by Hieu on day %d" % (i),
+        routingKey="monitor.update.cli_93f70840-719e-4a79-bf74-e51a6e1c9708")
+
+    sendRabbitMQ(testAnswer.getDict())

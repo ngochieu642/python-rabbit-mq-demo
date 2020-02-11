@@ -1,4 +1,18 @@
-ANSWER_TYPE = "MONITOR_UPDATE_VERSION_RESULT"
-ANSWER_PAYLOAD_TYPE = {"UPDATE": "update", "ROLLBACK": "rollback"}
-ANSWER_PAYLOAD_STATUS = {"SUCCESS": 'success', "FAIL": 'fail'}
-
+AGENT_MONITOR = {
+    "ANSWER": {
+        "TYPE": "MONITOR_UPDATE_VERSION_RESULT",
+        "PAYLOAD": {
+            "TYPE": {
+                "UPDATE": "update",
+                "ROLLBACK": "rollback"
+            },
+            "STATUS": {
+                "SUCCESS": "success",
+                "FAIL": "fail"
+            }
+        },
+    },
+    "REQUEST": {
+        "TYPE": "MONITOR_UPDATE_VERSION",
+    }
+}
