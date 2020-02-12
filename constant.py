@@ -1,18 +1,16 @@
 AGENT_MONITOR = {
-    "ANSWER": {
-        "TYPE": "MONITOR_UPDATE_VERSION_RESULT",
-        "PAYLOAD": {
-            "TYPE": {
-                "UPDATE": "update",
-                "ROLLBACK": "rollback"
-            },
-            "STATUS": {
-                "SUCCESS": "success",
-                "FAIL": "fail"
-            }
-        },
+    "TYPE": {
+        "REQUEST": "MONITOR_UPDATE_VERSION",
+        "ANSWER": "MONITOR_UPDATE_VERSION_RESULT",
     },
-    "REQUEST": {
-        "TYPE": "MONITOR_UPDATE_VERSION",
-    }
+    "PAYLOAD": {
+        "TYPE": {
+            "UPDATE": "update",
+            "ROLLBACK": "rollback"
+        },
+        "STATUS": {
+            "SUCCESS": "success",
+            "FAIL": "fail"
+        }
+    },
 }
