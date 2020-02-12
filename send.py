@@ -36,8 +36,7 @@ def sendRabbitMQ(body):
     try:
         channel.basic_publish(
             exchange='amq.topic',
-            routing_key='monitor.update.cli_10041997',
-            # routing_key='update.info.gateway.cli_10041997',
+            routing_key='monitor.update.cli_04aa54dc-a33d-4b28-8aca-e1709d9638a6',
             body=json.dumps(body),
             properties=pika.BasicProperties(content_type='text/plain',
                                             delivery_mode=1),
@@ -79,12 +78,13 @@ class ReceiveMonitor():
 
 for i in range(1):
     testAnswer = ReceiveMonitor(
-        payloadType=AGENT_MONITOR.ANSWER.PAYLOAD.TYPE.UPDATE,
-        status=AGENT_MONITOR.ANSWER.PAYLOAD.STATUS.SUCCESS,
+        payloadType=AGENT_MONITOR.PAYLOAD.TYPE.UPDATE,
+        status=AGENT_MONITOR.PAYLOAD.STATUS.SUCCESS,
         msg="Updated by Hieu on day %d" % (i),
-        container_type="db",
+        # container_type=AGENT_MONITOR.PAYLOAD.CONTAINERTYPE.DATABASE,
+        container_type=AGENT_MONITOR.PAYLOAD.CONTAINERTYPE.RABBITMQ,
         before_version="1.0",
-        current_version="1.1",
-        routingKey="monitor.update.cli_93f70840-719e-4a79-bf74-e51a6e1c9708")
+        current_version="3.4",
+        routingKey="monitor.update.cli_04aa54dc-a33d-4b28-8aca-e1709d9638a6")
 
     sendRabbitMQ(testAnswer.getDict())
